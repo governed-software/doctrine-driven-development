@@ -129,3 +129,31 @@ link-resolution) is not the same as the evidence that a *claim is honest*. The s
 audit had already shown it: four of five evidence rows had the field filled and still overstated. So
 the gate ships knowing what it cannot do — overstatement goes to adversarial review, not faked by a
 green check. Limit, honest: n=1, run by the author, not yet by an external developer.
+
+---
+
+## 2026-07-23 · governed-close on the governed-discovery slice (the pair closes)
+
+**What it was.** `governed-close` (`skills/governed-close/`), the back of the loop, run on the slice
+that had just finished: "author `governed-discovery` and ratify it." The friction that earned it: the
+front skill *opens* a loop, but nothing *closes* it — a slice can finish and quietly overstate its
+result, the exact failure the launch audit had already caught (four of five evidence rows filled and
+still overstated).
+
+**What the close surfaced (its own success test).**
+- *Proved:* running `governed-discovery` once, on a real feature, reordered construction — datapoint
+  #3 for H-001, the first Discovery produced by a skill rather than by hand. No wider.
+- *Not proved:* that it reorders for an **external** developer. n=1, author-run — and the author
+  already knew the doctrine, which makes them the **weakest** possible test of "experience before
+  knowing the name." The close forced that limit into the open; it was the sentence most likely to be
+  glossed. That is the datapoint `governed-close` earned its place with.
+- *Deferred, not activated:* both skills stay `Status: hypothesis`. Promoting them on internal,
+  author-run runs would be the overstatement they exist to prevent.
+- *Next open question:* does a skill-run Discovery reorder the first move for someone who has never
+  seen D³, on their own project? That is the missing datapoint — external, not meta.
+- *Not built yet:* CLI, compiler, and any skill beyond the discovery/close pair — deferred until an
+  external datapoint earns them.
+
+**Honest note.** Every lab datapoint so far is internal — D³-on-D³, one client corpus, and now two
+skill-on-skill runs. The method's central hypothesis (H-001) still waits on the one datapoint no
+internal run can supply: a stranger, on their own project.
