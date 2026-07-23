@@ -71,9 +71,10 @@ Then run the refutation:
 - **`questions.md`** — the Discovery of D³ on D³.
 - **`decision-log.md`** — what D³ has decided (with evidence) and deferred (honestly).
 - **`lab-log.md`** — the tools harvested from running D³ by hand on real projects.
-- **`skills/`** — executable D³: skills that run the method inside a coding agent. The open/close
-  pair of the loop: `governed-discovery` (front) and `governed-close` (back). Both hypothesis-bearing;
-  each carries its own refutation test.
+- **`skills/`** — executable D³: skills that run the method inside a coding agent. The loop's core
+  trio: `governed-discovery` (frame the question), `governed-close` (settle what a slice proved), and
+  `governed-review` (refute it adversarially, from the outside). All hypothesis-bearing; each carries
+  its own refutation test.
 
 ## Provenance
 

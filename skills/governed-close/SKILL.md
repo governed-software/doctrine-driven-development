@@ -64,6 +64,10 @@ skip — it worked. If it changed nothing you were already going to write, say s
 
 ---
 
+> **Grounded in** `constitution.md` (never claim more than a slice proved; one authority per decision;
+> the law is the compiled contract) + `README.md` (an ADR is the crystallization of what a slice
+> proved). This skill *executes* that doctrine; if the wording here diverges, the canonical docs win.
+>
 > **Status: hypothesis, not settled doctrine.** Same footing as `governed-discovery`: the canonical D³
 > docs defer tooling until the method earns it. This skill claims a disciplined close prevents the
 > overstatement that creeps in at the moment of declaring done. Its success test — the overstatement

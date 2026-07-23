@@ -157,3 +157,34 @@ still overstated).
 **Honest note.** Every lab datapoint so far is internal — D³-on-D³, one client corpus, and now two
 skill-on-skill runs. The method's central hypothesis (H-001) still waits on the one datapoint no
 internal run can supply: a stranger, on their own project.
+
+---
+
+## 2026-07-23 · governed-review on the skill pair (verifier ≠ producer, and it bit)
+
+**What it was.** `governed-review` (`skills/governed-review/`), the adversarial verifier, run against
+the two skills already committed (`governed-discovery`, `governed-close`) and itself — an independent
+skeptic turned on the producer's own work.
+
+**Its strongest datapoint (prior, real).** The core move — adversarial refutation of claims against
+artifacts — had already run on this project's launch evidence table and refuted four of five rows the
+author wrote from memory. That covers lens 1 (unproven / overstated claims); the other four lenses are
+not yet independently tested. Honest scope: governed-review is the *most* proven of the three, not
+fully proven.
+
+**What the review found on the pair.**
+- **Duplicate-authority / drift (fixed).** The skills restated the constitution's rules in their own
+  words without citing the source — if the doctrine changes, a skill goes stale silently, and two
+  authorities exist for one rule (lens 2). Fixed: each skill now carries a `Grounded in` line naming
+  the canonical docs and stating that if the wording diverges, the docs win. The skill *executes* the
+  doctrine; it does not re-legislate it.
+- **Tautological ratification (acknowledged, not fixable here).** The discovery/close success tests are
+  author-judged — verifier == producer (lens 4). The ratifications so far are the producer certifying
+  their own work. governed-review is the structural answer, but it cannot repair its own author-run
+  status: the missing datapoint is still an external reviewer.
+- **What survived:** no silent failures (the skills explicitly forbid dressing a non-result as
+  insight), no hidden exceptions (no carve-outs for "trivial" work).
+
+**Honest note.** A verifier that shares the producer's context is a weaker verifier. This run improved
+the artifacts — the drift fix is real — but the strongest test of governed-review is still someone with
+no stake reviewing work they did not write.

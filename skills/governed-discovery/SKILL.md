@@ -71,6 +71,10 @@ Ask them in order. Answer each in one or two lines — prose, not a plan.
 
 ---
 
+> **Grounded in** `constitution.md` + `README.md` (the three inversions; a question is architectural
+> only when its answer reorders construction). This skill *executes* that doctrine — it does not
+> re-legislate it; if the wording here diverges from the canonical docs, the docs win.
+>
 > **Status: hypothesis, not settled doctrine.** The canonical D³ docs defer tooling and agents until
 > the method earns them (`D3/README.md`, `D3/lab-log.md`). This skill is a *new* artifact on the
 > adoption axis: it claims an executable Discovery reproduces the H-001 effect (reorders construction)
