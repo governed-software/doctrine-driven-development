@@ -69,8 +69,8 @@ with its missing evidence.
 
 ## Handoff
 
-- **Consumes** — **Findings** from `governed-scout`.
-- **Produces** — **Architectural questions** (each surviving the reorder test) + the SDD + explicit deferrals.
+- **Consumes** — a [`ScoutReport`](../../contracts/ScoutReport.md) from `governed-scout`.
+- **Produces** — [`ArchitectureQuestion`](../../contracts/ArchitectureQuestion.md)s (each surviving the reorder test) + the SDD + explicit deferrals.
 - **Next station** — `governed-plan` (Planner), which orders the slices that attack these questions.
 
 ## What this refuses

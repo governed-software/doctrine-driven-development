@@ -58,7 +58,7 @@ NOT break — a claim that survived a real attempt is stronger for it.
 
 - **Consumes** — any claim and the artifact behind it: a slice's Evidence, an SDD, a Settlement, an ADR,
   a PR, a "done."
-- **Produces** — **Verdicts** per claim: confirmed · overstated · unproven · refuted.
+- **Produces** — a [`ReviewVerdict`](../../contracts/ReviewVerdict.md) per claim: confirmed · overstated · unproven · refuted.
 - **Next station** — back to whichever station produced the refuted claim. Review does not fix; a
   reviewer who patches becomes the producer and the evidence goes tautological.
 

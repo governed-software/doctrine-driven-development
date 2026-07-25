@@ -74,8 +74,8 @@ usually means the slice proved nothing.
 
 ## Handoff
 
-- **Consumes** — **Architectural questions** from `governed-sdd`.
-- **Produces** — **Slice sequence**, each slice specified as above, with the order justified.
+- **Consumes** — [`ArchitectureQuestion`](../../contracts/ArchitectureQuestion.md)s from `governed-sdd`.
+- **Produces** — an [`ExecutionPlan`](../../contracts/ExecutionPlan.md) of [`SliceSpec`](../../contracts/SliceSpec.md)s, with the order justified.
 - **Next station** — `governed-slice` (Builder), which executes exactly one.
 
 ## The test

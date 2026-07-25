@@ -68,7 +68,7 @@ the artifact refuses. Report both sides and do not resolve them — resolving is
 ## Handoff
 
 - **Consumes** — a question or a hunch.
-- **Produces** — **Findings** (cited) + named unknowns + contradictions.
+- **Produces** — a [`ScoutReport`](../../contracts/ScoutReport.md): cited findings, named unknowns, contradictions.
 - **Next station** — `governed-sdd` (Architect), which turns unknowns into architectural questions.
 
 ## The test (this is the whole point)

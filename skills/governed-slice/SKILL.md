@@ -71,8 +71,8 @@ Two honest lists:
 
 ## Handoff
 
-- **Consumes** — one **slice spec** from `governed-plan` (or a `governed-discovery` frame).
-- **Produces** — **Evidence** (raw, reproducible) + the scope ledger + what it could not produce.
+- **Consumes** — one [`SliceSpec`](../../contracts/SliceSpec.md) from `governed-plan` (or a `governed-discovery` frame).
+- **Produces** — an [`EvidenceBundle`](../../contracts/EvidenceBundle.md): raw, reproducible, plus the scope ledger.
 - **Next station** — `governed-review` (adversarial), then `governed-close` (settlement).
 
 ## The test

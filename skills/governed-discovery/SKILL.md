@@ -26,7 +26,10 @@ code from an unframed request — it frames the question and judges the evidence
 
 Write down, in one sentence, the implementation the person was about to start:
 
-> **Before:** "The first thing I was going to build is ______."
+> **Before:** "The first thing I thought I should build is ______."
+
+Write it in the first person, as a *belief* — not as a task. D³ does not change what the agent prints;
+it changes what the engineer thinks is true. A belief can be refuted; a task can only be done.
 
 You will test this line at the end. Skip it and you cannot know whether the Discovery did anything.
 
@@ -61,8 +64,8 @@ Ask them in order. Answer each in one or two lines — prose, not a plan.
 ## Handoff
 
 - **Consumes** — a build / implement / add request.
-- **Produces** — a **frame**, which is a slice spec in compressed form (question · overclaim to avoid ·
-  refuting slice · evidence contract · deferred).
+- **Produces** — a **frame**, which is a [`SliceSpec`](../../contracts/SliceSpec.md) in compressed form
+  (question · overclaim to avoid · refuting slice · evidence contract · deferred).
 - **Next station** — `governed-slice` (build it), then `governed-close` (settle it).
 
 In the Professional pipeline this skill is the **one-minute compression of Scout + Architect**. Reach

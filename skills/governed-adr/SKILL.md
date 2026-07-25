@@ -75,8 +75,8 @@ at this ADR. From this moment the ADR is the authority — the conversation that
 
 ## Handoff
 
-- **Consumes** — a **Settlement** from `governed-close` carrying an ADR candidate.
-- **Produces** — the **ADR**, plus the decision-log entry moved from deferred to decided.
+- **Consumes** — a [`Settlement`](../../contracts/Settlement.md) from `governed-close` carrying an ADR candidate.
+- **Produces** — a [`DecisionRecord`](../../contracts/DecisionRecord.md), plus the decision-log entry moved from deferred to decided.
 - **Next station** — none. The loop returns to `governed-scout` or `governed-sdd` with the next question
   that `governed-close` already opened.
 

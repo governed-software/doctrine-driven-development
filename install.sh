@@ -2,7 +2,7 @@
 # Doctrine-Driven Development (D³) — skill installer
 # https://github.com/governed-software/doctrine-driven-development
 #
-# Installs the governed-* skills into your coding agent.
+# Installs the governed-* skills into your engineering agent.
 # Native support: Claude Code (~/.claude/skills), Codex
 # ($CODEX_HOME/skills, or ~/.codex/skills), Pi
 # ($PI_CODING_AGENT_DIR/skills, or ~/.pi/agent/skills),

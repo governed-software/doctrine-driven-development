@@ -24,22 +24,30 @@ small enough that the chain would be ceremony. See [`README.md`](README.md) for 
 
 ## The handoff contract
 
-Each station consumes one named artifact and produces one named artifact. Nothing else crosses the
-boundary — not intent, not effort, not conversation.
+Each station consumes one **typed artifact** and produces the next station's input. Nothing else crosses
+the boundary — not intent, not effort, not conversation.
 
 | Station | Skill | Consumes | Produces |
 |---|---|---|---|
-| Scout | `governed-scout` | a question or a hunch | **Findings** — observed facts with citations, plus the named unknowns |
-| Architect | `governed-sdd` | Findings | **Architectural questions** (each passing the reorder test) + the SDD + explicit deferrals |
-| Planner | `governed-plan` | Architectural questions | **Slice sequence** — ordered, each slice carrying its refutation target and evidence contract |
-| Builder | `governed-slice` | one slice spec | **Evidence** — the observable result the slice contracted for, and what it could not produce |
-| Reviewer | `governed-review` | any claim + its artifact | **Verdicts** — confirmed · overstated · unproven · refuted |
-| Recorder | `governed-close` | Evidence + the slice's evidence contract | **Settlement** — proved / not proved / ADR candidate / next question / still deferred |
-| Recorder | `governed-adr` | a Settlement carrying an ADR candidate | **ADR** — *today we proved that…*, and the decision moves from deferred to decided |
+| Scout | `governed-scout` | a question or a hunch | [`ScoutReport`](contracts/ScoutReport.md) |
+| Architect | `governed-sdd` | `ScoutReport` | [`ArchitectureQuestion`](contracts/ArchitectureQuestion.md) + the SDD |
+| Planner | `governed-plan` | `ArchitectureQuestion` | [`ExecutionPlan`](contracts/ExecutionPlan.md) of [`SliceSpec`](contracts/SliceSpec.md)s |
+| Builder | `governed-slice` | `SliceSpec` | [`EvidenceBundle`](contracts/EvidenceBundle.md) |
+| Reviewer | `governed-review` | any claim + its artifact | [`ReviewVerdict`](contracts/ReviewVerdict.md) |
+| Recorder | `governed-close` | `EvidenceBundle` + its `SliceSpec` | [`Settlement`](contracts/Settlement.md) |
+| Recorder | `governed-adr` | a `Settlement` carrying a candidate | [`DecisionRecord`](contracts/DecisionRecord.md) |
 
-Read the table as a chain of types. If Scout hands the Architect a recommendation instead of Findings,
-the chain is already broken — the Architect is now reasoning about someone's opinion, not about the
-codebase.
+**This document decides the chain — the order, the refusals, and where artifacts land.
+[`contracts/`](contracts/) decides their shape:** required fields, invariants, and what makes an artifact
+invalid. One authority per decision; if this file and a contract disagree about a field, the contract
+wins.
+
+Read the table as a chain of types, because that is what it is. If Scout hands the Architect a
+recommendation instead of a `ScoutReport`, the chain is already broken — the Architect is now reasoning
+about someone's opinion rather than about the codebase, and nothing downstream can tell.
+
+A station handed an **invalid** artifact stops and says so. It never guesses the missing field: guessing
+a refutation target produces a slice that cannot fail, which is the same as no slice at all.
 
 ## The invariant — one station, one refusal
 

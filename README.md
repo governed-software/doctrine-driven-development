@@ -2,10 +2,16 @@
 
 **Install the engineering discipline, not just the prompt.**
 
-D³ is a set of skills for **Codex**, **Claude Code**, **Pi**, **Kimi Code**, and **OpenCode** that makes
-your coding agent earn architectural decisions with observable evidence — turning a build request into
-an architectural question, a refutable slice, and an explicit evidence contract, before implementation
-momentum hardens an assumption into architecture.
+> Programming agents generate code. **Engineering agents generate evidence.**
+
+D³ is a small SDK for engineering agents — **Codex**, **Claude Code**, **Pi**, **Kimi Code**, and
+**OpenCode** — that makes them earn architectural decisions with observable evidence: turning a build
+request into an architectural question, a refutable slice, and an explicit evidence contract, before
+implementation momentum hardens an assumption into architecture.
+
+What it distributes is not instructions. It is **roles, contracts, and a protocol** — seven stations,
+each producing a typed artifact the next one consumes. The skills are one implementation of the
+stations; [`contracts/`](contracts/) is what any implementation has to satisfy.
 
 > Native skills for Codex, Claude Code, Pi, Kimi Code, and OpenCode · Prompt fallback for any agent ·
 > **Status: hypothesis, designed to be refuted**
@@ -142,12 +148,14 @@ use the governed-discovery skill to frame this build request before proposing an
 That is the complete runtime setup. Each skill has one canonical, portable `SKILL.md`; Codex adds its
 own UI metadata sidecar. There is no daemon, API key, runtime dependency, or project configuration.
 
-## What changes in the agent's response?
+## What changes in your head
 
-Instead of jumping from request to implementation, `governed-discovery` produces a compact frame:
+Instead of jumping from request to implementation, `governed-discovery` produces a compact frame. The
+two lines that bracket it are the point — they are written in the first person because what moves is the
+engineer's belief, not the agent's output:
 
 ```text
-Before: the first thing I was going to build was …
+Before: the first thing I thought I should build was …
 
 Architectural question   What answer would change the build order?
 Overclaim to avoid       What would the current evidence not support?
@@ -182,15 +190,18 @@ governed-discovery → implement the refuting slice → governed-review → gove
 Every station is a **role that refuses the next role's job**. Full contract in
 [`pipeline.md`](pipeline.md).
 
-| Role | Skill | Consumes | Produces |
+| Role | Consumes | Produces | Implemented by |
 |---|---|---|---|
-| Scout | [`governed-scout`](skills/governed-scout/SKILL.md) | a question or a hunch | **Findings** — cited facts, named unknowns, contradictions. Never a recommendation. |
-| Architect | [`governed-sdd`](skills/governed-sdd/SKILL.md) | Findings | **Architectural questions** that survive the reorder test, the SDD, and the deferrals |
-| Planner | [`governed-plan`](skills/governed-plan/SKILL.md) | Architectural questions | **Slice sequence** ordered by blast radius, each with a refutation target and evidence contract |
-| Builder | [`governed-slice`](skills/governed-slice/SKILL.md) | one slice spec | **Evidence** — raw, reproducible — plus the scope ledger |
-| Reviewer | [`governed-review`](skills/governed-review/SKILL.md) | any claim + its artifact | **Verdicts** — confirmed · overstated · unproven · refuted |
-| Recorder | [`governed-close`](skills/governed-close/SKILL.md) | Evidence + its evidence contract | **Settlement** — proved, not proved, next question, ADR candidate |
-| Recorder | [`governed-adr`](skills/governed-adr/SKILL.md) | a Settlement with a candidate | **ADR** — *today we proved that…*, with the observation that would kill it |
+| **Scout** | a question or a hunch | [`ScoutReport`](contracts/ScoutReport.md) — cited facts, named unknowns, contradictions. Never a recommendation. | [`governed-scout`](skills/governed-scout/SKILL.md) |
+| **Architect** | `ScoutReport` | [`ArchitectureQuestion`](contracts/ArchitectureQuestion.md) — only what survives the reorder test, plus what was cut | [`governed-sdd`](skills/governed-sdd/SKILL.md) |
+| **Planner** | `ArchitectureQuestion` | [`ExecutionPlan`](contracts/ExecutionPlan.md) of [`SliceSpec`](contracts/SliceSpec.md)s, ordered by blast radius | [`governed-plan`](skills/governed-plan/SKILL.md) |
+| **Builder** | `SliceSpec` | [`EvidenceBundle`](contracts/EvidenceBundle.md) — raw, reproducible, plus the scope ledger | [`governed-slice`](skills/governed-slice/SKILL.md) |
+| **Reviewer** | any claim + its artifact | [`ReviewVerdict`](contracts/ReviewVerdict.md) — confirmed · overstated · unproven · refuted | [`governed-review`](skills/governed-review/SKILL.md) |
+| **Recorder** | `EvidenceBundle` + its `SliceSpec` | [`Settlement`](contracts/Settlement.md) — proved, not proved, next question, ADR candidate | [`governed-close`](skills/governed-close/SKILL.md) |
+| **Recorder** | a `Settlement` with a candidate | [`DecisionRecord`](contracts/DecisionRecord.md) — *today we proved that…*, with the observation that would kill it | [`governed-adr`](skills/governed-adr/SKILL.md) |
+
+The **role** is the unit, not the skill name. A skill is one implementation of a station; swap it and the
+chain still holds, as long as the artifact still satisfies its contract.
 
 You do not owe the chain all seven stations. Enter wherever the artifact you hold matches a station's
 **Consumes** column, and leave as soon as the question is answered. The one rule that never relaxes:
@@ -254,7 +265,7 @@ Start a new agent session after installing so it reloads the skill catalog.
 <details>
 <summary><b>No install? Use the portable prompt</b></summary>
 
-Paste this into any coding agent, then give it a build request:
+Paste this into any agent, then give it a build request:
 
 ```text
 Before writing any code for a build/implement/add request, frame it first (D³ governed-discovery):
@@ -316,7 +327,8 @@ the skill never changes anyone's first move, the skill is refuted — not the do
 ## Repository map
 
 - [`constitution.md`](constitution.md) — the principles; the canonical law.
-- [`pipeline.md`](pipeline.md) — the stations and their handoff contract; the authority for the chain.
+- [`pipeline.md`](pipeline.md) — the stations, the refusals, and where artifacts land; authority for the **chain**.
+- [`contracts/`](contracts/) — the typed artifacts (`ScoutReport` → `DecisionRecord`); authority for their **shape**.
 - [`hypotheses.md`](hypotheses.md) — H-001, H-002, and exactly how each dies.
 - [`questions.md`](questions.md) — D³'s own Discovery.
 - [`decision-log.md`](decision-log.md) — evidence-backed and deliberately deferred decisions.

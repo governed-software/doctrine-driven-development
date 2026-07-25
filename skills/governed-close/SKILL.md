@@ -52,8 +52,9 @@ skip — it worked. If it changed nothing you were already going to write, say s
 
 ## Handoff
 
-- **Consumes** — the slice's **Evidence** plus the evidence contract it was built against.
-- **Produces** — a **Settlement**: proved · not proved · ADR candidate (or none) · next question · still deferred.
+- **Consumes** — an [`EvidenceBundle`](../../contracts/EvidenceBundle.md) plus the
+  [`SliceSpec`](../../contracts/SliceSpec.md) it was built against.
+- **Produces** — a [`Settlement`](../../contracts/Settlement.md): proved · not proved · ADR candidate (or none) · next question · still deferred.
 - **Next station** — `governed-adr`, but **only** if the Settlement carries a candidate with evidence
   behind it. No candidate is the common and correct outcome. See [`pipeline.md`](../../pipeline.md).
 
