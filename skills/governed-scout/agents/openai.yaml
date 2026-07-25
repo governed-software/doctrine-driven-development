@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed Scout"
+  short_description: "Sweep the ground and report cited findings, never recommendations"
+  default_prompt: "Use $governed-scout to sweep this before we frame anything — cited findings and named unknowns only."

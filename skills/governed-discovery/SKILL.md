@@ -58,6 +58,18 @@ Ask them in order. Answer each in one or two lines — prose, not a plan.
 - **Yes, always** → the Discovery produced curiosity, not architecture. **Say so plainly** — do not
   dress a non-result as insight. The fix is a sharper Discovery next time, never a pretend result.
 
+## Handoff
+
+- **Consumes** — a build / implement / add request.
+- **Produces** — a **frame**, which is a slice spec in compressed form (question · overclaim to avoid ·
+  refuting slice · evidence contract · deferred).
+- **Next station** — `governed-slice` (build it), then `governed-close` (settle it).
+
+In the Professional pipeline this skill is the **one-minute compression of Scout + Architect**. Reach
+for `governed-scout` and `governed-sdd` instead when the facts are unverified or the questions are many;
+reach for this when the question is small enough that the full chain would be ceremony. See
+[`pipeline.md`](../../pipeline.md).
+
 ## What this refuses
 
 - It never writes the feature — it frames the question and hands you the reordered first slice.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed SDD"
+  short_description: "Turn findings into the questions that reorder construction"
+  default_prompt: "Use $governed-sdd to turn these findings into architectural questions and the SDD around them."

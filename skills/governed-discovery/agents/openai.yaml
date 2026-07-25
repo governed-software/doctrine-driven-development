@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed Discovery"
+  short_description: "Frame build requests before implementation"
+  default_prompt: "Use $governed-discovery to frame this build request before proposing or writing the implementation."

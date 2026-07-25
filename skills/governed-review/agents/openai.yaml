@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed Review"
+  short_description: "Test claims adversarially against artifacts"
+  default_prompt: "Use $governed-review to test this change’s load-bearing claims against its artifacts."

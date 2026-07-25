@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed Slice"
+  short_description: "Build exactly one refuting slice and produce raw evidence"
+  default_prompt: "Use $governed-slice to build this one slice against its evidence contract, nothing adjacent."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed Close"
+  short_description: "Close a slice against observable evidence"
+  default_prompt: "Use $governed-close to settle exactly what this slice proved before calling it done."

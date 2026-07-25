@@ -54,6 +54,18 @@ and *why the claim fails* — with the quote that refutes it. Then the honest ve
 **unproven** (no artifact), or **refuted** (the artifact contradicts it). Say plainly what you could
 NOT break — a claim that survived a real attempt is stronger for it.
 
+## Handoff
+
+- **Consumes** — any claim and the artifact behind it: a slice's Evidence, an SDD, a Settlement, an ADR,
+  a PR, a "done."
+- **Produces** — **Verdicts** per claim: confirmed · overstated · unproven · refuted.
+- **Next station** — back to whichever station produced the refuted claim. Review does not fix; a
+  reviewer who patches becomes the producer and the evidence goes tautological.
+
+Unlike the others this station is not a link in the chain — it can be pointed at **any** station's
+output, and it is the only one that may run on the pipeline's own artifacts. See
+[`pipeline.md`](../../pipeline.md).
+
 ## What this refuses
 
 - It never reviews for style, naming, or taste while a load-bearing claim is unchecked.

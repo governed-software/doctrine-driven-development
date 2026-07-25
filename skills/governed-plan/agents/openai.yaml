@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed Plan"
+  short_description: "Order refuting slices by blast radius, with evidence contracts"
+  default_prompt: "Use $governed-plan to turn these architectural questions into an ordered slice sequence."

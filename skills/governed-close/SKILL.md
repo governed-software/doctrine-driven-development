@@ -50,6 +50,13 @@ that the thing is true.
 If closing forces you to shrink a claim, declare a limit, or surface a next question you were about to
 skip — it worked. If it changed nothing you were already going to write, say so plainly.
 
+## Handoff
+
+- **Consumes** — the slice's **Evidence** plus the evidence contract it was built against.
+- **Produces** — a **Settlement**: proved · not proved · ADR candidate (or none) · next question · still deferred.
+- **Next station** — `governed-adr`, but **only** if the Settlement carries a candidate with evidence
+  behind it. No candidate is the common and correct outcome. See [`pipeline.md`](../../pipeline.md).
+
 ## What this refuses
 
 - It never lets "I built it" stand in for "the slice proved it."

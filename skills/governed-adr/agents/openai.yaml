@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed ADR"
+  short_description: "Crystallize what a slice proved, with its refutation condition"
+  default_prompt: "Use $governed-adr to write the ADR for what this slice proved — past tense, cited, with how it dies."
