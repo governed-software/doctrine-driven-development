@@ -66,6 +66,12 @@ faster than any missing feature.
 
 Nothing is removed. A report that turns out to be mistaken gets a correcting row, not a deletion.
 
+Every report carries `evidence`, plus what it turned out to be — `evidence: ratifies` or
+`evidence: refutes` — and `evidence: stranger` when the reporter has no prior contact with the author.
+That last label is the one the published claim actually depends on, so it is applied from the
+reporter's own answer and never inferred. Anyone can filter the issues by it and count for themselves,
+without trusting the table above.
+
 ## What counts as internal
 
 Every datapoint behind D³ today comes from the author's own work: the Milpa framework and its
