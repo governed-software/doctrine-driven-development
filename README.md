@@ -14,7 +14,8 @@ each producing a typed artifact the next one consumes. The skills are one implem
 stations; [`contracts/`](contracts/) is what any implementation has to satisfy.
 
 > Native skills for Codex, Claude Code, Pi, Kimi Code, and OpenCode · Prompt fallback for any agent ·
-> **Status: hypothesis, designed to be refuted**
+> **Status: hypothesis, designed to be refuted** — [what has been reported so far](EVIDENCE.md)
+> (today: nothing) · [report what happened to you](https://github.com/governed-software/doctrine-driven-development/issues/new?template=evidence.yml)
 
 It complements Domain-Driven Design, TDD, SDD, and ADRs. It governs the step before them:
 

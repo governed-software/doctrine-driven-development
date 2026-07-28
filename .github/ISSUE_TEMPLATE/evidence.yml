@@ -1,0 +1,96 @@
+name: Evidence report
+description: What happened when you used D³ — whether it worked or not
+title: "evidence: "
+labels: ["evidence"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        D³ is a hypothesis with two published ratification conditions, and this is the only
+        way either one can be observed. **A report that it did nothing is worth as much as a
+        report that it worked** — more, probably, since we already believe the second one.
+
+        There is nothing to install and no telemetry anywhere. This form is the channel.
+
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: What happened
+      options:
+        - Nothing changed — I saw no difference
+        - It got in the way — worse than not using it
+        - My first move changed
+        - A station refused to do the next station's job, and the result was better
+        - Something else
+    validations:
+      required: true
+
+  - type: dropdown
+    id: relationship
+    attributes:
+      label: Have you worked with the author, or talked before this?
+      description: >
+        The published claim is specifically about developers we have never met. An
+        enthusiastic report from a friend does not ratify it — it is a different, weaker
+        datapoint, and the ledger has to be able to tell them apart. Answer plainly; a "yes"
+        does not make your report less welcome.
+      options:
+        - No — never had contact
+        - We have talked, but I do not work with them
+        - Yes — colleague, client, or collaborator
+    validations:
+      required: true
+
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: Which distribution
+      options: [Starter (3 skills), Professional (8 skills), Prompt fallback, Not sure]
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What you were building
+      description: One or two sentences. Enough for a reader to judge whether your case resembles theirs.
+    validations:
+      required: true
+
+  - type: textarea
+    id: first_move
+    attributes:
+      label: The first move — before and after
+      description: >
+        The Starter claim is precisely this. What was the agent about to do, and what did it
+        do instead? If it did the same thing either way, say that — it is the most useful
+        answer this form can receive.
+      placeholder: |
+        Without it, it would have: started writing the migration.
+        With it, it: asked which of two schemas the answer changes, then built the smaller one first.
+        Or: no difference — it wrote the same code.
+    validations:
+      required: true
+
+  - type: textarea
+    id: artifact
+    attributes:
+      label: The observable artifact
+      description: >
+        Paste what you can actually show — the frame it printed, the review verdict, the ADR,
+        the diff. A claim with nothing attached is an opinion, which is fine to hold and not
+        enough to move a ledger. Redact anything private; the shape is what matters.
+      render: text
+
+  - type: textarea
+    id: anything
+    attributes:
+      label: Anything else
+      description: Where it broke, what it should have asked, what you expected and did not get.
+
+  - type: markdown
+    attributes:
+      value: |
+        This issue stays public. It is summarized — for or against — in
+        [`EVIDENCE.md`](https://github.com/governed-software/doctrine-driven-development/blob/main/EVIDENCE.md),
+        which links back here so anyone can read your words instead of our summary of them.

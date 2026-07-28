@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: The evidence ledger
+    url: https://github.com/governed-software/doctrine-driven-development/blob/main/EVIDENCE.md
+    about: What has been reported so far, for and against — including the count of zero.
