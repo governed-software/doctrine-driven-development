@@ -7,6 +7,14 @@
 # Reproducible on purpose: same tree in, same bytes out. Anyone can rerun this
 # against the tag and compare, which is the only reason to trust the manifest at
 # all — a digest nobody can regenerate is a number, not a check.
+#
+# KEYS.asc and SHA256SUMS.asc are deliberately NOT covered, and this is not an
+# oversight to fix later. A signature cannot appear inside the thing it signs,
+# and listing the public key here would be circular: the key is what verifies
+# this manifest, so a digest of the key stored in the manifest guarantees
+# nothing an attacker who rewrote both could not also rewrite. Their integrity
+# comes from elsewhere — the signed tag, and the fingerprint published on a
+# host we do not serve.
 set -euo pipefail
 
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."

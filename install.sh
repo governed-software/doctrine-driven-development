@@ -11,17 +11,17 @@
 #
 # Usage:
 #   Claude Code (default):
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | bash
 #   Codex:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --codex
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | bash -s -- --codex
 #   Pi:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --pi
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | bash -s -- --pi
 #   Kimi Code:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --kimi
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | bash -s -- --kimi
 #   OpenCode:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --opencode
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | bash -s -- --opencode
 #   All five:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --all
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | bash -s -- --all
 #
 # Two distributions. Starter is the default; add --pro for the full pipeline.
 # The agent flag and the tier flag combine, in either order:
@@ -36,7 +36,7 @@ set -euo pipefail
 # The ref this installer pulls from. A tag, never a branch: `main` moves, so a
 # digest taken against it is stale by the next commit and a reader who verified
 # yesterday verified something else. Override to test an unreleased tree.
-D3_REF="${D3_REF:-v0.1.0}"
+D3_REF="${D3_REF:-v0.1.1}"
 RAW="${D3_RAW_BASE:-https://raw.githubusercontent.com/governed-software/doctrine-driven-development/$D3_REF}"
 
 # The fingerprint that promulgates this distribution. Printed on every run so
@@ -179,7 +179,15 @@ announce_provenance() {
       say "    obeying. Its own installer holds itself to that. To check this"
       say "    one, import the key that promulgates it and run again:"
       say ""
-      say "      gpg --recv-keys $D3_SIGNING_KEY"
+      say "      curl -fsSL $RAW/KEYS.asc | gpg --import"
+      say ""
+      say "    That key is not on a keyserver, and importing it from the same"
+      say "    place as the manifest proves nothing on its own. Cross-check the"
+      say "    fingerprint against a source we do not serve:"
+      say ""
+      say "      github.com/governed-software/doctrine-driven-development"
+      say "      — the tag and every commit show Verified under this key"
+      say "      governed.software — same fingerprint, different host"
       say ""
       say "    To install anyway, say so:"
       say ""
