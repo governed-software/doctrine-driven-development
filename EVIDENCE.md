@@ -34,11 +34,12 @@ ledger of reports cannot record a non-event. What it can record is **since when*
 readable: a channel open for a week with no reports says nothing; the same channel open much longer,
 still at zero, is the refutation arriving on schedule. The date above is the instrument.
 
-What this file deliberately does **not** do is name the threshold — how long, how many honest
-attempts, before the skills are called refuted. Fixing that number *after* seeing the data is how a
-hypothesis quietly becomes unfalsifiable, one reasonable-sounding extension at a time. It belongs in a
-promulgated decision record, written before the data exists, and it is not written yet. Until it is,
-this ledger reports and does not judge.
+The threshold itself — how many honest reports, by when, and what each outcome means — is
+pre-registered in [`REFUTATION.md`](REFUTATION.md), written on the day this channel opened and signed,
+so it could not be chosen after seeing the data. **The verdict falls due on 2027-07-27**, and which of
+the three it is follows from the count in the table below, not from an argument made that day.
+
+This ledger counts. It does not judge.
 
 ## Report what happened
 

@@ -15,7 +15,9 @@ Not how. Not yet.
 - **Discovery opens relevant uncertainty; it never closes it falsely.** A Discovery that produces only
   answers is fake.
 - **An ADR is not an initial decision — it is the crystallization of what a slice proved.**
-- **The methodology applies to itself.** If a claim cannot be refuted, it is not doctrine.
+- **The methodology applies to itself.** If a claim cannot be refuted, it is not doctrine —
+  including this one. The observation that refutes D³ is pre-registered in
+  [`REFUTATION.md`](REFUTATION.md), written before the first external datapoint and signed.
 - **Stack-agnostic.** The discipline already survived three languages and domains (Milpa/PHP,
   OverlayKit/TypeScript, DOM Protocol). It is not caged in one.
 

@@ -15,7 +15,8 @@ stations; [`contracts/`](contracts/) is what any implementation has to satisfy.
 
 > Native skills for Codex, Claude Code, Pi, Kimi Code, and OpenCode · Prompt fallback for any agent ·
 > **Status: hypothesis, designed to be refuted** — [what has been reported so far](EVIDENCE.md)
-> (today: nothing) · [report what happened to you](https://github.com/governed-software/doctrine-driven-development/issues/new?template=evidence.yml)
+> (today: nothing) · [report what happened to you](https://github.com/governed-software/doctrine-driven-development/issues/new?template=evidence.yml) ·
+> [what would refute it, written before the data and signed](REFUTATION.md)
 
 It complements Domain-Driven Design, TDD, SDD, and ADRs. It governs the step before them:
 
