@@ -45,6 +45,25 @@ jobs:
           done < <(find install.sh skills -type f | sort)
           exit $missing
 
+      - name: Timestamps still bind to what they stamped
+        # Every .tsr in the tree must verify against the file it names. This is
+        # what makes a timestamp durable rather than decorative: edit a signed
+        # promulgation after the fact and the token stops matching, here, on the
+        # next push — instead of on the day someone finally checks.
+        #
+        # Falsifier: append a byte to any stamped file and this step fails.
+        run: |
+          found=0
+          while IFS= read -r token; do
+            target="${token%.*.tsr}"
+            found=$((found + 1))
+            test -f "$target" || { echo "$token stamps a file that is gone: $target"; exit 1; }
+            openssl ts -verify -data "$target" -in "$token" -CApath /etc/ssl/certs >/dev/null 2>&1 \
+              || { echo "$token no longer verifies against $target"; exit 1; }
+            echo "  ok  $token"
+          done < <(find . -name '*.tsr' -not -path './.git/*' | sort)
+          test "$found" -gt 0 || { echo "no timestamp tokens found — REFUTATION.md should carry two"; exit 1; }
+
       - name: Installs from a local checkout
         run: |
           CLAUDE_SKILLS_DIR="$RUNNER_TEMP/skills" bash install.sh --pro

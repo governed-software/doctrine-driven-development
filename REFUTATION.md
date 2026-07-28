@@ -1,8 +1,13 @@
 # The refutation condition of D³ itself
 
-> Pre-registration. Written **2026-07-27**, before any external datapoint existed, and signed.
+> Pre-registration. Written **2026-07-27** (America/Mexico_City), before any external datapoint
+> existed, signed, and timestamped by two independent authorities.
 > [`REFUTATION.md.asc`](REFUTATION.md.asc) is the detached signature; the key is the one that
 > promulgates every release — `gpg --locate-keys rodrigo@teamx.agency`.
+>
+> The timestamp tokens read **2026-07-28T02:33Z**, which is the same moment: every date in this file
+> is local, every token is UTC, and the six-hour offset is the whole of the difference. All deadlines
+> below are dates in that same local zone.
 
 The [constitution](constitution.md) commits to this in one line: *the methodology applies to itself; if
 a claim cannot be refuted, it is not doctrine.* That line has been true of everything D³ asks of a
@@ -79,9 +84,36 @@ or to what counts as an honest report, made after the first entry in `EVIDENCE.m
 pre-registration and must be published as such. Moving the goalposts is permitted; **moving them
 quietly is not.**
 
-The date above is self-attested — signed by the same authority it constrains, which is a real
-weakness and is named here rather than hidden. Anchoring promulgations to an independent timestamp is
-open work.
+### The date does not rest on our word
+
+A signature says *who*, not *when*. Signed alone, the date above would be certified by the same key it
+constrains — consistent, and not independent: a key compromised later could promulgate law backdated
+to before the compromise, and nothing in the record would contradict it.
+
+So the signature over this file carries two **RFC 3161** timestamp tokens, from authorities with no
+relationship to this project and none to each other:
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/REFUTATION.md
+curl -fsSLO https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/REFUTATION.md.asc
+curl -fsSLO https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/REFUTATION.md.asc.digicert.tsr
+curl -fsSLO https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/REFUTATION.md.asc.sectigo.tsr
+
+gpg --verify REFUTATION.md.asc REFUTATION.md                      # who
+openssl ts -verify -data REFUTATION.md.asc \
+  -in REFUTATION.md.asc.digicert.tsr -CApath /etc/ssl/certs       # when, per DigiCert
+openssl ts -verify -data REFUTATION.md.asc \
+  -in REFUTATION.md.asc.sectigo.tsr  -CApath /etc/ssl/certs       # when, per Sectigo
+```
+
+Both chain to roots already in a standard trust store, so nothing extra is fetched to check them. Two
+rather than one because a single timestamping authority is a single party to trust, which is the
+problem restated at a different address; backdating this document now requires DigiCert and Sectigo to
+be wrong together.
+
+They attest that the signature existed by that instant — never that it did not exist earlier. A
+timestamp bounds the late side only. What it forecloses is precisely what matters here: adding this
+pre-registration, or quietly adjusting its numbers, after the data arrived.
 
 ---
 
