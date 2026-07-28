@@ -11,17 +11,17 @@
 #
 # Usage:
 #   Claude Code (default):
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash
 #   Codex:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --codex
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --codex
 #   Pi:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --pi
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --pi
 #   Kimi Code:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --kimi
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --kimi
 #   OpenCode:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --opencode
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --opencode
 #   All five:
-#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --all
+#     curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --all
 #
 # Two distributions. Starter is the default; add --pro for the full pipeline.
 # The agent flag and the tier flag combine, in either order:
@@ -33,7 +33,15 @@
 #                     The whole station chain. For someone already working this way.
 set -euo pipefail
 
-RAW="${D3_RAW_BASE:-https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main}"
+# The ref this installer pulls from. A tag, never a branch: `main` moves, so a
+# digest taken against it is stale by the next commit and a reader who verified
+# yesterday verified something else. Override to test an unreleased tree.
+D3_REF="${D3_REF:-v0.1.0}"
+RAW="${D3_RAW_BASE:-https://raw.githubusercontent.com/governed-software/doctrine-driven-development/$D3_REF}"
+
+# The fingerprint that promulgates this distribution. Printed on every run so
+# what you are trusting is on screen, not implied.
+D3_SIGNING_KEY="${D3_SIGNING_KEY:-7D72DEBDA1D36D34}"
 STARTER_SKILLS=(governed-discovery governed-review governed-close)
 PRO_ONLY_SKILLS=(governed-scout governed-sdd governed-plan governed-slice governed-adr)
 SKILLS=("${STARTER_SKILLS[@]}")
@@ -69,13 +77,155 @@ remove_paths() {
   done
 }
 
+# ---------------------------------------------------------------------------
+# Provenance and integrity
+#
+# Two different questions, deliberately kept apart because they fail apart:
+#
+#   integrity  — are these the bytes the manifest names?  Needs no key, costs
+#                nothing, so it is never optional.
+#   provenance — did an authority you recognize promulgate that manifest?  Needs
+#                the public key, and it is the question ADR-19 is actually
+#                about: before obeying, check that what claims to govern you
+#                belongs to someone you know.
+#
+# Collapsing them is how a script ends up "verified" because a checksum matched
+# a file the attacker also wrote. So: a bad digest always refuses; a bad
+# signature always refuses; and a signature we cannot check at all is UNPROVEN —
+# it does not silently pass, it asks you to say out loud that you accept it.
+# ---------------------------------------------------------------------------
+
+MANIFEST_FILE=""
+PROVENANCE="unproven"
+
+digest_of() {
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$1" | awk '{print $1}'
+  elif command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$1" | awk '{print $1}'
+  else
+    return 1
+  fi
+}
+
+refuse() {
+  say ""
+  say "  ✗ $1"
+  shift
+  local line
+  for line in "$@"; do say "    $line"; done
+  exit 1
+}
+
+load_manifest() {
+  # Installing from a checkout you already hold: nothing crossed the network, so
+  # there is nothing for this installer to attest that `git verify-tag` does not
+  # attest better. Say so rather than printing a green check we did not earn.
+  if [ -n "$LOCAL_SOURCE_ROOT" ]; then
+    PROVENANCE="local"
+    say "  · source: $LOCAL_SOURCE_ROOT (local tree, not verified here)"
+    return 0
+  fi
+
+  local dir
+  dir="$(mktemp -d)" || refuse "Could not create a temporary directory."
+  MANIFEST_FILE="$dir/SHA256SUMS"
+
+  curl -fsSL "$RAW/SHA256SUMS" -o "$MANIFEST_FILE" 2>/dev/null \
+    || refuse "Could not download the manifest for $D3_REF." \
+              "Every file this installer writes is checked against it," \
+              "so it will not continue without one."
+
+  if ! command -v gpg >/dev/null 2>&1; then
+    PROVENANCE="unproven"
+    return 0
+  fi
+
+  if ! curl -fsSL "$RAW/SHA256SUMS.asc" -o "$dir/SHA256SUMS.asc" 2>/dev/null; then
+    PROVENANCE="unproven"
+    return 0
+  fi
+
+  # gpg exits non-zero both for "bad signature" and for "I do not have that
+  # key". Only the first is an attack; the second is a stranger's first run.
+  # Telling them apart is the whole reason this is not a one-liner.
+  local output
+  output="$(gpg --status-fd 1 --verify "$dir/SHA256SUMS.asc" "$MANIFEST_FILE" 2>/dev/null)" || true
+  if printf '%s' "$output" | grep -q '^\[GNUPG:\] BADSIG'; then
+    refuse "The manifest signature is INVALID." \
+           "This is not a missing key — the signature is present and does not" \
+           "match. Do not run this installer. Report it at" \
+           "https://github.com/governed-software/doctrine-driven-development/issues"
+  fi
+  if printf '%s' "$output" | grep -q '^\[GNUPG:\] GOODSIG'; then
+    PROVENANCE="verified"
+  else
+    PROVENANCE="unproven"
+  fi
+  return 0
+}
+
+announce_provenance() {
+  case "$PROVENANCE" in
+    verified)
+      say "  ✓ manifest signed by $D3_SIGNING_KEY — provenance VERIFIED"
+      ;;
+    local)
+      ;;
+    *)
+      say "  · manifest downloaded, signature NOT checked — provenance UNPROVEN"
+      say ""
+      say "    D³ teaches an agent to verify what claims to govern it before"
+      say "    obeying. Its own installer holds itself to that. To check this"
+      say "    one, import the key that promulgates it and run again:"
+      say ""
+      say "      gpg --recv-keys $D3_SIGNING_KEY"
+      say ""
+      say "    To install anyway, say so:"
+      say ""
+      say "      D3_ACCEPT_UNPROVEN=1 <the same command>"
+      if [ "${D3_ACCEPT_UNPROVEN:-0}" != "1" ]; then
+        say ""
+        exit 1
+      fi
+      say ""
+      say "    Continuing: D3_ACCEPT_UNPROVEN=1 is set."
+      ;;
+  esac
+}
+
+verify_digest() {
+  local relative_path="$1"
+  local file="$2"
+  [ -n "$MANIFEST_FILE" ] || return 0
+
+  local expected actual
+  expected="$(awk -v p="$relative_path" '$2 == p || $2 == "*" p {print $1; exit}' "$MANIFEST_FILE")"
+  if [ -z "$expected" ]; then
+    refuse "$relative_path is not in the manifest for $D3_REF." \
+           "The installer only writes files the manifest names."
+  fi
+
+  actual="$(digest_of "$file")" \
+    || refuse "No sha256sum or shasum on this machine." \
+              "Without one, nothing downloaded can be checked."
+
+  if [ "$expected" != "$actual" ]; then
+    refuse "$relative_path does not match the manifest." \
+           "expected $expected" \
+           "got      $actual" \
+           "Nothing was installed."
+  fi
+}
+
 fetch_file() {
   local relative_path="$1"
   local destination="$2"
   if [ -n "$LOCAL_SOURCE_ROOT" ]; then
     cp "$LOCAL_SOURCE_ROOT/$relative_path" "$destination"
   else
-    curl -fsSL "$RAW/$relative_path" -o "$destination"
+    curl -fsSL "$RAW/$relative_path" -o "$destination" || return 1
+    verify_digest "$relative_path" "$destination"
   fi
 }
 
@@ -276,6 +426,9 @@ else
 fi
 
 say "Doctrine-Driven Development · $TIER_LABEL distribution (${#SKILLS[@]} skills)"
+say "  · ref: $D3_REF"
+load_manifest
+announce_provenance
 say ""
 case "$target" in
   --claude) queue_portable_skills "Claude Code" "$CLAUDE_SKILLS_DIR" ;;

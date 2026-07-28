@@ -22,6 +22,57 @@ It complements Domain-Driven Design, TDD, SDD, and ADRs. It governs the step bef
 Question → Hypothesis → Slice → Adversarial review → Evidence → Doctrine → Next question
 ```
 
+## Before you install: verify what is about to govern you
+
+D³ teaches an agent to check that whatever claims to govern it belongs to an authority it recognizes,
+*before* obeying. A method that taught that and then asked you to pipe an unexamined script into your
+shell would be refuted by its own first lesson. So this installer is held to it.
+
+**Import the key once.** Every release manifest is signed by it:
+
+```bash
+gpg --recv-keys 7D72DEBDA1D36D34
+```
+
+**Then read the installer before running it** — the recommended path, and the only one that lets you
+check the script itself rather than only what it downloads:
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh
+curl -fsSLO https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/SHA256SUMS
+curl -fsSLO https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/SHA256SUMS.asc
+
+gpg --verify SHA256SUMS.asc SHA256SUMS   # provenance: who promulgated this list
+sha256sum -c SHA256SUMS --ignore-missing # integrity: is this the install.sh it names
+
+less install.sh                          # and then decide for yourself
+bash install.sh
+```
+
+The one-liners further down still work, and they are not blind any more: the installer pulls from an
+immutable tag, verifies every file it writes against the signed manifest, and refuses on a mismatch.
+What it cannot do is vouch for itself — a script already running cannot tell you it was the right
+script. That is what the block above is for, and why it comes first.
+
+**What each check answers, and what it does when it fails:**
+
+| | Question | On failure |
+|---|---|---|
+| **Integrity** | Are these the bytes the manifest names? | Always refuses. Needs no key. |
+| **Provenance** | Did an authority you recognize promulgate that manifest? | Bad signature always refuses. No key in your keyring is `UNPROVEN` — it stops and asks you to say `D3_ACCEPT_UNPROVEN=1` out loud. |
+
+The two are kept apart because they fail apart. A checksum that matches a file the attacker also wrote
+is a green check that proves nothing; that is the exact confusion this table exists to prevent.
+
+**Rebuild the manifest yourself** — a digest nobody can regenerate is a number, not a check:
+
+```bash
+git clone --branch v0.1.0 https://github.com/governed-software/doctrine-driven-development
+cd doctrine-driven-development
+git verify-tag v0.1.0
+bash tools/build-manifest.sh && git diff --exit-code SHA256SUMS && echo "reproduced"
+```
+
 ## Two distributions
 
 They split by **how you already work**, not by feature count.
@@ -29,7 +80,7 @@ They split by **how you already work**, not by feature count.
 ### Starter — 3 skills (default)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash
 ```
 
 `governed-discovery` · `governed-review` · `governed-close`
@@ -41,7 +92,7 @@ out whether the discipline does anything for you.
 ### Professional — 8 skills
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --pro
+curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --pro
 ```
 
 Starter **plus** `governed-scout` · `governed-sdd` · `governed-plan` · `governed-slice` · `governed-adr`
@@ -88,7 +139,7 @@ Pi can also invoke the skill implicitly when a build request matches its descrip
 Install the native skills (add `--pro` for the full station chain):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --codex
+curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --codex
 ```
 
 Start a new Codex session, then try:
@@ -102,7 +153,7 @@ Codex can also invoke the skill implicitly when a build request matches its desc
 ### Claude Code
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash
 ```
 
 Start a new Claude Code session and ask it to build or add a feature. `governed-discovery` will frame
@@ -113,7 +164,7 @@ the request before implementation.
 Install the native skills (add `--pro` for the full station chain):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --kimi
+curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --kimi
 ```
 
 Start a new Kimi Code session, then try:
@@ -129,7 +180,7 @@ Kimi Code can also invoke the skill implicitly when a build request matches its 
 Install the native skills (add `--pro` for the full station chain):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --opencode
+curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --opencode
 ```
 
 Start a new OpenCode session, then try:
@@ -230,7 +281,7 @@ into a conversation is not a handoff. Starter keeps four files (`constitution.md
 ### Install all native variants
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | bash -s -- --all
+curl -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.0/install.sh | bash -s -- --all
 ```
 
 `--all` installs all five variants. The agent flag and the distribution flag combine in either order —

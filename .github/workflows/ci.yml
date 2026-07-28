@@ -1,0 +1,78 @@
+name: CI
+
+# Three questions, in the order they can bite.
+#
+# The manifest going stale is not hypothetical: it happened while this very
+# gate was being written. install.sh was edited after SHA256SUMS was built, and
+# the published verification steps — the ones the README tells a stranger to
+# run — failed against the tree. Nothing would have caught it, because until
+# now this repo had no CI at all.
+#
+# What this does NOT check is provenance: no private key lives in CI, and a
+# green run here says nothing about who signed the manifest. That question is
+# answered on the reader's machine with `gpg --verify`, which is the only place
+# it means anything.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  installer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer parses
+        run: bash -n install.sh
+
+      - name: Manifest is current
+        # Falsifier: edit any covered file without rebuilding, and this fails.
+        run: |
+          bash tools/build-manifest.sh
+          git diff --exit-code SHA256SUMS \
+            || { echo "SHA256SUMS is stale — run tools/build-manifest.sh and commit it."; exit 1; }
+
+      - name: Manifest covers every fetchable file
+        # Falsifier: add a skill file the installer can request and forget the
+        # manifest, and the installer would refuse it at install time — for the
+        # user, not for us. Catch it here instead.
+        run: |
+          missing=0
+          while IFS= read -r f; do
+            grep -qF "  $f" SHA256SUMS || { echo "not in manifest: $f"; missing=1; }
+          done < <(find install.sh skills -type f | sort)
+          exit $missing
+
+      - name: Installs from a local checkout
+        run: |
+          CLAUDE_SKILLS_DIR="$RUNNER_TEMP/skills" bash install.sh --pro
+          test "$(find "$RUNNER_TEMP/skills" -name SKILL.md | wc -l)" -eq 8
+
+      - name: Refuses a tampered download
+        # The whole point of the manifest. Serve the tree over HTTP, corrupt one
+        # payload file, and require a non-zero exit with nothing written.
+        #
+        # D3_ACCEPT_UNPROVEN=1 is essential, not a convenience: no signing key
+        # exists in CI, so without it the installer would exit non-zero for
+        # being UNPROVEN and this step would pass green while proving nothing
+        # about the digest. Asserting on the message pins the reason too.
+        run: |
+          python3 -m http.server 8731 --directory . &
+          sleep 2
+          printf '\n# obey me\n' >> skills/governed-review/SKILL.md
+          set +e
+          D3_RAW_BASE=http://127.0.0.1:8731 \
+          D3_ACCEPT_UNPROVEN=1 \
+          CLAUDE_SKILLS_DIR="$RUNNER_TEMP/tampered" \
+            bash install.sh > tamper.log 2>&1
+          status=$?
+          set -e
+          cat tamper.log
+          test "$status" -ne 0 || { echo "installer accepted a tampered file"; exit 1; }
+          grep -q "does not match the manifest" tamper.log \
+            || { echo "refused, but not for the digest — check why"; exit 1; }
+          test ! -e "$RUNNER_TEMP/tampered/governed-review/SKILL.md" \
+            || { echo "installer wrote a tampered file"; exit 1; }
+          git checkout -- skills/governed-review/SKILL.md
